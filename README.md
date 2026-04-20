@@ -12,8 +12,7 @@
 
 You can upload your screenshots [here](https://github.com/MuiseDestiny/zotero-style/issues/48).
 
-[Zotero 6 version](https://github.com/MuiseDestiny/zotero-style/releases/tag/2.6.7) | [Zotero 7 version](https://github.com/MuiseDestiny/zotero-style/releases)
-
+[✨ Download the latest xpi file](https://gitee.com/MuiseDestiny/plugins/raw/master/zotero-style.xpi)
 
 
 [中文文档](https://www.notion.so/Zotero-Style-bc2aebbbb6df4b7baa858e376e4fc5be) |
@@ -25,7 +24,6 @@ You can upload your screenshots [here](https://github.com/MuiseDestiny/zotero-st
 
 
 ![image](https://github.com/user-attachments/assets/87a6737c-4789-4195-a46e-d4b8bbb20b79)
-
 
 
 ## TODO
