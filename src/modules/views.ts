@@ -1,4 +1,4 @@
-import { config } from "../../package.json";
+﻿import { config } from "../../package.json";
 import AddonItem from "./item";
 import Progress from "./progress";
 import { getString, initLocale } from "./locale";
@@ -1864,6 +1864,7 @@ export default class Views {
    * 注册Prompt命令
    */
   public async registerCommands() {
+    return;
     // 注册搜索文库
     ztoolkit.Prompt.register([{
       id: "search",
@@ -3186,65 +3187,7 @@ export default class Views {
       return items
     })
 
-    // Zotero.Reader.open(item.id, location
-    // if (!Zotero.Reader._open) {
-    try {
-      ztoolkit.patch(
-        Zotero.Reader,
-        "open",
-        config.addonRef,
-        (original) =>
-          // @ts-ignore
-          async (id: number, location: { pageIndex: number, annotationKey: string }, ...other: any) => {
-            if (!location) {
-              const tagStartArr = tagsUI.getTagStart()
-              if (tagStartArr.length) { 
-                const attItem = Zotero.Items.get(id) as Zotero.Item;
-                const annoItem = attItem.getAnnotations()
-                  .find(annoItem => annoItem.getTags()
-                      .find(tag => tagStartArr
-                        .find(tagStart => tag.tag.startsWith(tagStart)))
-                  )
-                if (annoItem) {
-                  location = {
-                    pageIndex: Number(annoItem.annotationPageLabel) - 1,
-                    annotationKey: annoItem.key as string
-                  }
-                }
-              }
-            }
-            // 修复定位bug
-            window.setTimeout(async () => {
-              // 随着缩放它会一直闪烁，这个bug，Zotero官方一直没修复
-              // 所以将它替换为border形式，即使不消失也不会太影响观感
-              const win = (
-                (await ztoolkit.Reader.getReader() as _ZoteroReaderInstance)._iframeWindow as any
-              ).wrappedJSObject
-              ztoolkit.UI.appendElement({
-                tag: "style",
-                ignoreIfExists: true,
-                properties: {
-                  innerHTML: `
-                    .layer-blink .rect {
-                      background-color: transparent !important;
-                      border: 2px solid deeppink;
-                    }
-                  `
-                },
-              }, win.document.documentElement as any);
-            }, 0)
-            // 为tab添加标签
-            window.setTimeout(async () => {
-              
-            })
-            return original.call(Zotero.Reader, id, location as any, ...other)
-          }
-      )
-    } catch {}
-    //   Zotero.Reader._open = true
-    // }
   }
-
   public async addNumberToCollectionTree() {
     await registerCollectionTreeNumbers(this.cache);
     return;
@@ -3367,3 +3310,5 @@ interface Record {
     [key: string]: string | number
   }
 }
+
+

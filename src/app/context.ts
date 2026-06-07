@@ -1,5 +1,4 @@
 import ZoteroToolkit from "zotero-plugin-toolkit/dist";
-import Events from "../modules/events";
 import Views from "../modules/views";
 import { ZoteroStyleStorage } from "../storage";
 
@@ -14,7 +13,6 @@ export interface AddonData {
     window: Window;
   };
   storage?: ZoteroStyleStorage;
-  events?: Events;
   views?: Views;
 }
 

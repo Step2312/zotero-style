@@ -66,7 +66,7 @@ pref("extensions.zotero.__addonRef__.ratingColumn.size", "1");
 pref("extensions.zotero.__addonRef__.function.columnsViews.enable", true);
 pref("extensions.zotero.__addonRef__.columnsViews", "[]");
 
-pref("extensions.zotero.__addonRef__.function.annotationColors.enable", true);
+pref("extensions.zotero.__addonRef__.function.annotationColors.enable", false);
 pref("extensions.zotero.__addonRef__.annotationColors", '[["general.yellow","#ffd400"],["general.red","#ff6666"],["general.green","#5fb236"],["general.blue","#2ea8e5"],["general.purple","#a28ae5"],["general.magenta","#e56eee"],["general.orange","#f19837"],["general.gray","#aaaaaa"]]');
 pref("extensions.zotero.__addonRef__.annotationColorsGroups", '[["Untitled",[["general.yellow","#ffd400"],["general.red","#ff6666"],["general.green","#5fb236"],["general.blue","#2ea8e5"],["general.purple","#a28ae5"],["general.magenta","#e56eee"],["general.orange","#f19837"],["general.gray","#aaaaaa"]]]]');
 
@@ -93,7 +93,6 @@ pref("extensions.zotero.__addonRef__.nestedTags.linkSymbol", "/");
 
 
 pref("extensions.zotero.__addonRef__.storage.in", "note");
-pref("extensions.zotero.__addonRef__.storage.filename", "");
 
 pref("extensions.zotero.__addonRef__.easyscholar.secretKey", "");
 

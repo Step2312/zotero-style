@@ -1,4 +1,4 @@
-import { config } from "../../package.json";
+﻿import { config } from "../../package.json";
 import { delay } from "./promise";
 var ColorRNA = require('color-rna');
 
@@ -144,15 +144,6 @@ export class Tags {
           }
           #zotero-tag-selector .tag-selector-list  {
             height: auto !important;
-          }
-          .nested-search-box .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0.8;
-          }
-          .nested-search-box .icon:hover {
-            opacity: 1
           }
           #zotero-editpane-notes row {
             margin-left: 1em;
@@ -509,7 +500,7 @@ export class Tags {
         height: "100px",
         overflowY: "hidden",
         flex: "1 1 auto",
-        display: "flex",
+        display: "none",
         width: `${ZoteroPane.tagSelector.getContainerDimensions().width}px`,
         flexDirection: "column",
         justifyContent: "space-between",
@@ -527,124 +518,6 @@ export class Tags {
         overflowX: "",
         overflowY: "auto"
       }
-    }, this.nestedTagsContainer) as HTMLDivElement;
-    // 搜索框
-    const searchBoxHeight = 15
-    let timer: number;
-    const searchBox = ztoolkit.UI.appendElement({
-      tag: "div",
-      classList: ["nested-search-box"],
-      styles: {
-        width: "calc(100% - 35px)",
-        height: `${searchBoxHeight}px`,
-        padding: "5px",
-        borderRadius: "5px",
-        border: "1px solid #e0e0e0",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: "3px",
-        marginTop: "3px",
-        opacity: "0.6"
-      },
-      children: [
-        {
-          tag: "div",
-          styles: {
-            width: `${searchBoxHeight}px`,
-            height: `${searchBoxHeight}px`,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          },
-          properties: {
-            innerHTML: `<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="${searchBoxHeight}" height="${searchBoxHeight}"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#5a5a5a"></path></svg>`
-          }
-        },
-        {
-          tag: "input",
-          id: "nested-tags-search-input",
-          styles: {
-            outline: "none",
-            border: "none",
-            width: "100%",
-            margin: "0 5px"
-          },
-          properties: {
-            value: this.searchText,
-          },
-          listeners: [
-            {
-              type: "focus",
-              listener: () => {
-                searchBox.style.opacity = "1"
-                searchBox.style.boxShadow = `0 0 0 1px rgba(0,0,0,0.5)`
-              }
-            },
-            {
-              type: "blur",
-              listener: () => {
-                searchBox.style.opacity = "0.6"
-                searchBox.style.boxShadow = ``
-              }
-            },
-            {
-              type: "keyup",
-              listener: async () => {
-                const inputNode = searchBox.querySelector("input") as HTMLInputElement
-                const clearNode = searchBox.querySelector(".clear") as HTMLInputElement
-                const searchText = inputNode.value as string
-                if (searchText.length) {
-                  clearNode.style.display = ""
-                } else {
-                  clearNode.style.display = "none"
-
-                }
-                window.clearTimeout(timer)
-                timer = window.setTimeout(async () => {
-                  // 搜索
-                  console.log("search...", searchText)
-                  this.searchText = searchText
-                  // 复制一份
-                  this.plainTags = await this.getPlainTags()
-                  this.nestedTags = await this.getNestedTags()
-                  box.innerHTML = ""
-                  await this.render(box, this.nestedTags, 0)
-                }, 500)
-              }
-            }
-          ]
-        },
-        {
-          tag: "div",
-          classList: ["icon", "clear"],
-          styles: {
-            width: `${searchBoxHeight}px`,
-            height: `${searchBoxHeight}px`,
-            display: this.searchText?.length ? "" : "none"
-          },
-          properties: {
-            innerHTML: `<svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="${searchBoxHeight}" height="${searchBoxHeight}"><path d="M512.288 1009.984c-274.912 0-497.76-222.848-497.76-497.76s222.848-497.76 497.76-497.76c274.912 0 497.76 222.848 497.76 497.76s-222.848 497.76-497.76 497.76zM700.288 368.768c12.16-12.16 12.16-31.872 0-44s-31.872-12.16-44.032 0l-154.08 154.08-154.08-154.08c-12.16-12.16-31.872-12.16-44.032 0s-12.16 31.84 0 44l154.08 154.08-154.08 154.08c-12.16 12.16-12.16 31.84 0 44s31.872 12.16 44.032 0l154.08-154.08 154.08 154.08c12.16 12.16 31.872 12.16 44.032 0s12.16-31.872 0-44l-154.08-154.08 154.08-154.08z" fill="#5a5a5a" p-id="5698"></path></svg>`
-          },
-          listeners: [
-            {
-              type: "click",
-              listener: async () => {
-                const inputNode = searchBox.querySelector("input") as HTMLInputElement
-                const clearNode = searchBox.querySelector(".clear") as HTMLInputElement
-                inputNode.value = ""
-                clearNode.style.display = "none"
-                this.searchText = ""
-                // 复制一份
-                this.plainTags = await this.getPlainTags()
-                this.nestedTags = await this.getNestedTags()
-                box.innerHTML = ""
-                await this.render(box, this.nestedTags, 0)
-              }
-            }
-          ]
-        },
-      ]
     }, this.nestedTagsContainer) as HTMLDivElement;
 
     // 这是Zotero原本标签视图的父节点，在Zotero中这么命名
@@ -1052,45 +925,6 @@ export class Tags {
                             { x, y, width: 130, height: 130 },
                             [
                               {
-                                name: "Rename",
-                                listener: async () => {
-                                  const io = { tagName: orignalTagName }
-                                  const win = new ztoolkit.Dialog(2, 1)
-                                    .addCell(0, 0, {
-                                      tag: "input",
-                                      namespace: "html",
-                                      id: "tag-name",
-                                      attributes: {
-                                        "data-prop": "value",
-                                        "data-bind": "tagName",
-                                        type: "text",
-                                      },
-                                      styles: {
-                                        height: "20px"
-                                      },
-                                    })
-                                    .addButton("Rename", "tag-rename")
-                                    .addButton("Cancel", "tag-cancel")
-                                    .setDialogData(io)
-                                    .open("Tag");
-                                  // @ts-ignore
-                                  await io.unloadLock.promise;
-                                  const newTagName = io.tagName
-                                  if (orignalTagName != newTagName) {
-                                    matchedTags
-                                      .forEach((tag: string) => {
-                                        Zotero.Tags.rename(1, tag,
-                                          tag.replace(
-                                            new RegExp(`^${orignalTagName}`),
-                                            newTagName
-                                          )
-                                        );
-                                      })
-                                    await this.init()
-                                  }
-                                },
-                              },
-                              {
                                 name: "Copy Tag",
                                 listener: () => {
                                   new ztoolkit.Clipboard().addText(orignalEndTagName, "text/unicode").copy();
@@ -1365,8 +1199,7 @@ export class Tags {
                         width: "95%"
                       },
                       properties: {
-                        // @ts-ignore
-                        innerText: Zotero.Items.get(annoItem.parentID)._displayTitle
+                        innerText: ""
                       }
                     }
                   ]
@@ -1460,15 +1293,6 @@ export class Tags {
                   .createLine({ text: "Copy Annotation Text", type: "success" })
                   .show()
               }
-            },
-            {
-              type: "dblclick",
-              listener: () => {
-                Zotero.Reader.open(annoItem.parentID, {
-                  pageIndex: Number(annoItem.annotationPageLabel) - 1,
-                  annotationKey: annoItem.key as string
-                } as any)
-              }
             }
           ]
         }, parent) as HTMLElement
@@ -1486,3 +1310,6 @@ interface NestedTags {
   };
   id: string
 }
+
+
+

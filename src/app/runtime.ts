@@ -1,7 +1,6 @@
 import { config } from "../../package.json";
 import { initLocale } from "../modules/locale";
 import { registerPrefs, registerPrefsScripts } from "../preferences";
-import { handleReaderTabSelected } from "../features/reader";
 import { FeatureRegistry, registerFeatures } from "../features/registry";
 import { createStorage, ZoteroStyleStorage } from "../storage";
 import { cleanupAddon } from "./cleanup";
@@ -32,7 +31,6 @@ export class ZoteroStyleRuntime {
     ztoolkit.log(this.storage);
 
     this.features = await registerFeatures(this.storage);
-    addon.data.events = this.features.events;
     addon.data.views = this.features.views;
 
     this.refreshItemTree();
@@ -54,13 +52,6 @@ export class ZoteroStyleRuntime {
     extraData: { [key: string]: any }
   ) {
     ztoolkit.log("notify", event, type, ids, extraData);
-    if (
-      event == "select" &&
-      type == "tab" &&
-      extraData[ids[0]].type == "reader"
-    ) {
-      await handleReaderTabSelected(this.features?.views);
-    }
   }
 
   public async onPrefsEvent(type: string, data: { [key: string]: any }) {
@@ -82,11 +73,6 @@ export class ZoteroStyleRuntime {
   }
 
   private registerNotifier() {
-    this.notifierID = Zotero.Notifier.registerObserver(
-      { notify: this.onNotify.bind(this) },
-      ["tab"]
-    );
-
     window.addEventListener(
       "unload",
       () => {
