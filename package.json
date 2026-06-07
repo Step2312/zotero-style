@@ -1,6 +1,6 @@
 {
   "name": "zotero-style",
-  "version": "4.6.1",
+  "version": "4.7.0",
   "description": "A modular Zotero 7-9 plugin for reading progress, custom columns, tags, publication metadata, and graph views with a React and Ant Design UI.",
   "keywords": [
     "zotero",

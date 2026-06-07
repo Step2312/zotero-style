@@ -3,7 +3,7 @@
     "zoterostyle@bird.org": {
       "updates": [
         {
-          "version": "4.6.1",
+          "version": "4.7.0",
           "update_link": "https://github.com/Step2312/zotero-style/releases/latest/download/zotero-style.xpi",
           "applications": {
             "zotero": {
