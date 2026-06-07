@@ -92,7 +92,7 @@ export default class Progress {
       points.push({ x: x, y: y })
     }
     // 线绘制
-    var polygon = `M ${points[0].x * w} ${h} L ${points[0].x * w}, ${points[0].y * h} R `
+    var progressAreaPath = `M ${points[0].x * w} ${h} L ${points[0].x * w}, ${points[0].y * h} R `
       + points.slice(1).map(p => `${p.x * w}, ${p.y * h}`).join(" ")
       + ` V ${h} H ${points[0].x * w}`
     var line = `M ${points[0].x * w}, ${points[0].y * h} R `
@@ -101,7 +101,7 @@ export default class Progress {
     const paper = Raphael(container, "100%", "100%");
     paper.setViewBox(0, 0, w, h, true)
     const [red, green, blue] = Progress.getRGB(color)
-    paper.path(polygon).attr({
+    paper.path(progressAreaPath).attr({
       stroke: "transparent",
       fill: `90-rgba(${red}, ${green}, ${blue}, ${opacity})-rgba(${red}, ${green}, ${blue}, 0.8)`,
     })

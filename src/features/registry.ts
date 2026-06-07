@@ -1,7 +1,7 @@
 import Events from "../modules/events";
 import Views from "../modules/views";
-import { registerReaderProgress } from "../features/readerProgress";
-import { registerViews } from "../features/views";
+import { registerReaderProgress } from "./readerProgress";
+import { registerViews } from "./views";
 import { ZoteroStyleStorage } from "../storage";
 
 export interface FeatureRegistry {

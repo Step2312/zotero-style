@@ -16,3 +16,19 @@ declare const rootURI: string;
 declare const addon: import("../src/addon").default;
 
 declare const __env__: "production" | "development";
+
+declare module "*.css";
+
+type Prompt = any;
+declare const Prompt: any;
+declare const save: any;
+
+interface _ZoteroItem {
+  attachmentPath: string;
+  firstCreator: string;
+  itemType: string;
+  note: string;
+  relatedItems: string[];
+  _displayTitle: string;
+  getColoredTags: () => { tag: string; color: string }[];
+}

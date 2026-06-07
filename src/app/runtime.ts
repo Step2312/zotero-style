@@ -2,8 +2,9 @@ import { config } from "../../package.json";
 import { initLocale } from "../modules/locale";
 import { registerPrefs, registerPrefsScripts } from "../preferences";
 import { handleReaderTabSelected } from "../features/reader";
-import { FeatureRegistry, registerFeatures } from "./registry";
+import { FeatureRegistry, registerFeatures } from "../features/registry";
 import { createStorage, ZoteroStyleStorage } from "../storage";
+import { cleanupAddon } from "./cleanup";
 
 export class ZoteroStyleRuntime {
   private notifierID?: string;
@@ -40,22 +41,9 @@ export class ZoteroStyleRuntime {
   public onShutdown() {
     try {
       ztoolkit.log("zotero style onShutdown");
-      ztoolkit.unregisterAll();
-      ztoolkit.UI.unregisterAll();
-      ztoolkit.ItemTree.unregisterAll();
-
-      document.querySelector("#zotero-style-show-hide-graph-view")?.remove();
-      const tagSelector = document.querySelector(".tag-selector") as
-        | HTMLDivElement
-        | undefined;
-      if (tagSelector) {
-        tagSelector.style.display = "";
-      }
+      cleanupAddon(this.notifierID);
     } catch (e) {
       console.log("ERROR onShutdown", e);
-    } finally {
-      addon.data.alive = false;
-      delete Zotero[config.addonInstance];
     }
   }
 
@@ -102,9 +90,7 @@ export class ZoteroStyleRuntime {
     window.addEventListener(
       "unload",
       () => {
-        if (this.notifierID) {
-          Zotero.Notifier.unregisterObserver(this.notifierID);
-        }
+        cleanupAddon(this.notifierID);
       },
       false
     );

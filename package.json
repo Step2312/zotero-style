@@ -1,19 +1,28 @@
 {
   "name": "zotero-style",
-  "version": "1.0.0",
-  "description": "A Zotero plugin for creating a personal Zotero Style.",
+  "version": "4.6.1",
+  "description": "A modular Zotero 7-9 plugin for reading progress, custom columns, tags, publication metadata, and graph views with a React and Ant Design UI.",
+  "keywords": [
+    "zotero",
+    "zotero-plugin",
+    "react",
+    "ant-design",
+    "reading-progress",
+    "graph-view",
+    "bibliography"
+  ],
   "config": {
-    "addonName": "Zotero Style",
-    "addonID": "zoterostyle@polygon.org",
+    "addonName": "Ethereal Style",
+    "addonID": "zoterostyle@bird.org",
     "addonInstance": "ZoteroStyle",
     "addonRef": "zoterostyle",
-    "releasepage": "https://github.com/MuiseDestiny/zotero-style/releases/latest/download/zotero-style.xpi",
-    "updaterdf": "https://raw.githubusercontent.com/MuiseDestiny/zotero-style/bootstrap/update.json"
+    "releasepage": "https://github.com/Step2312/zotero-style/releases/latest/download/zotero-style.xpi",
+    "updaterdf": "https://raw.githubusercontent.com/Step2312/zotero-style/bootstrap/update.json"
   },
   "main": "src/index.ts",
   "scripts": {
-    "build-dev": "cross-env NODE_ENV=development node scripts/build.js",
-    "build-prod": "cross-env NODE_ENV=production node scripts/build.js",
+    "build-dev": "tsx tools/build.mts --dev",
+    "build-prod": "tsx tools/build.mts",
     "build": "concurrently -c auto npm:build-prod npm:tsc",
     "tsc": "tsc --noEmit",
     "start-z6": "node scripts/start.js --z 6",
@@ -29,17 +38,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MuiseDestiny/zotero-style.git"
+    "url": "git+https://github.com/Step2312/zotero-style.git"
   },
-  "author": "Polygon",
+  "author": "bird",
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/MuiseDestiny/zotero-style/issues"
+    "url": "https://github.com/Step2312/zotero-style/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/Step2312/zotero-style#readme",
+  "zotero-plugin": {
+    "source": [
+      "addon",
+      "src"
+    ]
+  },
   "dependencies": {
+    "@ant-design/icons": "^5.6.1",
     "@authing/native-js-ui-components": "^4.3.10",
     "3d-force-graph": "^1.71.1",
+    "antd": "^5.29.3",
     "authing-js-sdk": "^4.23.44",
     "color-rna": "^1.0.1",
     "d3": "^7.8.2",
@@ -49,6 +66,8 @@
     "pdfjs-dist": "^3.4.120",
     "pixi": "^0.3.1",
     "raphael": "^2.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "runes": "^0.4.3",
     "sentence-extractor": "^1.0.7",
     "terser": "^5.17.1",
@@ -58,13 +77,18 @@
   },
   "devDependencies": {
     "@types/node": "^18.13.0",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "compressing": "^1.7.0",
+    "concurrently": "^10.0.3",
     "cross-env": "^7.0.3",
     "esbuild": "^0.16.17",
     "release-it": "^15.6.0",
     "replace-in-file": "^6.3.5",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "uglify-js": "^3.17.4",
+    "zotero-plugin-scaffold": "^0.8.6",
     "zotero-types": "^0.1.5"
   }
 }

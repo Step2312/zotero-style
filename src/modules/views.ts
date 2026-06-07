@@ -448,7 +448,7 @@ export default class Views {
         item: Zotero.Item
       ) => {
         let coloredTags = item.getColoredTags()
-        let tags = item.getTags().filter(tag => coloredTags.map((tag: any) => tag.tag).indexOf(tag.tag) == -1)
+        let tags: any[] = item.getTags().filter(tag => coloredTags.map((tag: any) => tag.tag).indexOf(tag.tag) == -1)
         tags = [...coloredTags, ...tags.sort((a, b) => a.tag > b.tag ? 1 : -1)]
         return tags.length > 0 ? JSON.stringify(tags) : "";
       },
@@ -1630,7 +1630,7 @@ export default class Views {
               {
                 namespace: "html",
                 styles: {
-                  dislay: "flex",
+                  display: "flex",
                   width: "100%",
                   height: "100%"
                 },
@@ -2431,7 +2431,7 @@ export default class Views {
           let timer: Number | undefined
           let updateGroups = () => {
             saveGroups(groups)
-            container.querySelectorAll(".command").forEach(e => e.remove())
+            container.querySelectorAll(".command").forEach((e: Element) => e.remove())
             // 已创建的标注颜色
             for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
               const group = groups[groupIndex]
@@ -2556,7 +2556,7 @@ export default class Views {
                       styles: {
                         display: "flex",
                         flexDirection: "row",
-                        aliginItems: "center",
+                        alignItems: "center",
                         justifyContent: "space-around",
                         width: "80%",
                       },
@@ -2710,7 +2710,7 @@ export default class Views {
                               type: "change",
                               listener: () => {
                                 let name = anno[0] = (ele.querySelector("#name") as HTMLInputElement).value
-                                isUsed && saveAnnotations(annotations)
+                                isUsed && saveAnnotations(annotations);
                                 updateGroups()
                                 ztoolkit.log(name)
                               }
@@ -2741,8 +2741,8 @@ export default class Views {
                               listener: () => {
                                 let color = anno[1] = (ele.querySelector("#color") as HTMLInputElement).value
                                 ztoolkit.log(color)
-                                isUsed && saveAnnotations(annotations)
-                                ele.querySelector("#circle")!.style.backgroundColor = color
+                                isUsed && saveAnnotations(annotations);
+                                (ele.querySelector("#circle") as HTMLElement).style.backgroundColor = color
                                 updateGroups()
                               }
                             }
@@ -2861,7 +2861,7 @@ export default class Views {
                       new ztoolkit.ProgressWindow("提示", { closeOtherProgressWindows: true, closeTime: 3000 })
                         .createLine({ text: "已为您在浏览器打开申请密钥教程，请参考配置", type:"default" })
                         .show()
-                      Zotero.launchURL("https://github.com/MuiseDestiny/zotero-style/releases/tag/2.5.1")
+                      Zotero.launchURL("https://github.com/Step2312/zotero-style/releases/tag/2.5.1")
                       Zotero.launchURL("http://xhslink.com/d5E72o")
                     }
                   }

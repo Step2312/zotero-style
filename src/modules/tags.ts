@@ -201,7 +201,7 @@ export class Tags {
       }
       else if (this.isDuplicates()) {
         var s = await this.ref.getSearchObject();
-        let tmpTable;
+        let tmpTable: string | undefined;
         for (let id in s.conditions) {
           let c = s.conditions[id];
           if (c.condition == 'tempTable') {
@@ -892,7 +892,7 @@ export class Tags {
         console.log(arr)
         return arr
       })() as any
-    }, document.documentElement)
+    }, document.documentElement) as HTMLElement
     const winRect = document.documentElement.getBoundingClientRect()
     const nodeRect = menuNode.getBoundingClientRect()
     // 避免溢出
@@ -1253,7 +1253,7 @@ export class Tags {
               }
             }
           ]
-        }, itemNode.querySelector("#tag") as HTMLDivElement)
+        }, itemNode.querySelector("#tag") as HTMLDivElement) as HTMLElement
         const args = [tree, children[tag].children, margin + this.props.item.padding + this.props.icon.size + this.props.icon.right]
         if (!this.state[key].collapse) {
           // @ts-ignore
@@ -1471,7 +1471,7 @@ export class Tags {
               }
             }
           ]
-        }, parent)
+        }, parent) as HTMLElement
       })
     }
     render(annoItems)

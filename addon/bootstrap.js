@@ -17,13 +17,8 @@ function getServices() {
   if (typeof Services != "undefined") {
     return (_Services = Services);
   }
-  if (ChromeUtils.importESModule) {
-    return (_Services = ChromeUtils.importESModule(
-      "resource://gre/modules/Services.sys.mjs"
-    ).Services);
-  }
-  return (_Services = ChromeUtils.import(
-    "resource://gre/modules/Services.jsm"
+  return (_Services = ChromeUtils.importESModule(
+    "resource://gre/modules/Services.sys.mjs"
   ).Services);
 }
 

@@ -10,10 +10,10 @@ export default class GraphView {
   private graph!: Graph;
   private urls: any = {
     Zotero: "https://www.zotero.org/",
-    Style: "https://github.com/MuiseDestiny/zotero-style",
-    Help: "https://github.com/MuiseDestiny/zotero-style#zotero-style",
-    Share: "https://github.com/MuiseDestiny/zotero-style/issues/48",
-    Issue: "https://github.com/MuiseDestiny/zotero-style/issues/new/choose",
+    Style: "https://github.com/Step2312/zotero-style",
+    Help: "https://github.com/Step2312/zotero-style#zotero-style",
+    Share: "https://github.com/Step2312/zotero-style/issues/48",
+    Issue: "https://github.com/Step2312/zotero-style/issues/new/choose",
     Plugins: "https://zotero-chinese.gitee.io/zotero-plugins/#/"
   }
   private functions: any = {
@@ -361,7 +361,7 @@ export default class GraphView {
           }
         }
       ]
-    }, container)
+    }, container) as HTMLElement
     const size = .7
     const color = {
       active: "#FF597B",
@@ -482,6 +482,18 @@ export default class GraphView {
     const renderer = this.renderer = frame.contentWindow!.renderer
     //@ts-ignore
     this.renderer.containerEl.style.height = window.getComputedStyle(this.container).height
+    frame.contentWindow!.addEventListener(
+      "zotero-style:graph-mode-change",
+      async (event: Event) => {
+        const mode = (event as CustomEvent<{ mode?: string }>).detail?.mode;
+        if (!mode || !this.modeFunction[mode]) {
+          return;
+        }
+        this.mode = mode;
+        this.setData(await this.getGraph(true));
+      }
+    )
+
     /**
      * 点击文献直接定位
      */
