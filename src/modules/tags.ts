@@ -1,4 +1,5 @@
 import { config } from "../../package.json";
+import { delay } from "./promise";
 var ColorRNA = require('color-rna');
 
 /**
@@ -183,7 +184,7 @@ export class Tags {
      * https://github.com/zotero/zotero/blob/2f0d41c0cb9ea47cce03ea51bf8ac718dbe44b15/chrome/content/zotero/xpcom/collectionTreeRow.js#L321
      */
     // @ts-ignore
-    Zotero.CollectionTreeRow.prototype.getSearchObject = Zotero.Promise.coroutine(function* () {
+    Zotero.CollectionTreeRow.prototype.getSearchObject = async function () {
       if (Zotero.CollectionTreeCache.lastTreeRow && Zotero.CollectionTreeCache.lastTreeRow.id !== this.id) {
         Zotero.CollectionTreeCache.clear();
       }
@@ -199,7 +200,7 @@ export class Tags {
         var s = this.ref;
       }
       else if (this.isDuplicates()) {
-        var s = yield this.ref.getSearchObject();
+        var s = await this.ref.getSearchObject();
         let tmpTable;
         for (let id in s.conditions) {
           let c = s.conditions[id];
@@ -265,7 +266,7 @@ export class Tags {
       Zotero.CollectionTreeCache.lastTreeRow = this;
       Zotero.CollectionTreeCache.lastSearch = s2;
       return s2;
-    });
+    };
 
     ZoteroPane.collectionsView.onSelect.addListener(async () => {
       this.collectionItems = undefined
@@ -777,7 +778,7 @@ export class Tags {
                     const e = nodes[i] as any
                     if ((that.state[e.key] ??= {}).collapse == _isAllCollapse) {
                       e.click()
-                      await Zotero.Promise.delay(10)
+                      await delay(10)
                       if (_isAllCollapse) {
                         window.setTimeout(() => {
                           toggle(e.tree)

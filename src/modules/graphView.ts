@@ -1,6 +1,7 @@
 import { config } from "../../package.json";
 
 import Bubble from "./bubble";
+import { delay } from "./promise";
 
 export default class GraphView {
   private renderer: any;
@@ -316,7 +317,7 @@ export default class GraphView {
     document.querySelectorAll("#graph").forEach(e => e.remove());
     document.querySelectorAll(".resizer").forEach(e => e.remove())
     while (!document.querySelector("#item-tree-main-default")) {
-      await Zotero.Promise.delay(100)
+      await delay(100)
     }
     const mainNode = document.querySelector("#item-tree-main-default")! as HTMLDivElement
     // 图形容器
@@ -475,7 +476,7 @@ export default class GraphView {
     // 等待js执行结束
     // @ts-ignore
     while (!frame.contentWindow!.renderer) {
-      await Zotero.Promise.delay(100)
+      await delay(100)
     }
     // @ts-ignore
     const renderer = this.renderer = frame.contentWindow!.renderer

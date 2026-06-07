@@ -8,6 +8,24 @@ if (typeof Zotero == "undefined") {
 }
 
 var chromeHandle;
+var _Services;
+
+function getServices() {
+  if (_Services) {
+    return _Services;
+  }
+  if (typeof Services != "undefined") {
+    return (_Services = Services);
+  }
+  if (ChromeUtils.importESModule) {
+    return (_Services = ChromeUtils.importESModule(
+      "resource://gre/modules/Services.sys.mjs"
+    ).Services);
+  }
+  return (_Services = ChromeUtils.import(
+    "resource://gre/modules/Services.jsm"
+  ).Services);
+}
 
 // In Zotero 6, bootstrap methods are called before Zotero is initialized, and using include.js
 // to get the Zotero XPCOM service would risk breaking Zotero startup. Instead, wait for the main
@@ -20,7 +38,7 @@ async function waitForZotero() {
     await Zotero.initializationPromise;
   }
 
-  var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+  var Services = getServices();
   var windows = Services.wm.getEnumerator("navigator:browser");
   var found = false;
   while (windows.hasMoreElements()) {

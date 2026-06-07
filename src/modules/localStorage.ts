@@ -1,11 +1,12 @@
 import { config } from "../../package.json";
+import { defer } from "./promise";
 
 class LocalStorage {
   public filename!: string;
   public cache: any;
-  public lock: _ZoteroPromiseObject;
+  public lock: ReturnType<typeof defer>;
   constructor(filename: string) {
-    this.lock = Zotero.Promise.defer()
+    this.lock = defer()
     this.init(filename)
   }
 

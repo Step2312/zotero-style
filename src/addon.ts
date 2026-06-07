@@ -1,5 +1,8 @@
 import ZoteroToolkit from "zotero-plugin-toolkit/dist"
 import hooks from "./hooks";
+import Events from "./modules/events";
+import Views from "./modules/views";
+import { ZoteroStyleStorage } from "./storage";
 
 class Addon {
   public data: {
@@ -13,6 +16,9 @@ class Addon {
     prefs?: {
       window: Window;
     };
+    storage?: ZoteroStyleStorage;
+    events?: Events;
+    views?: Views;
   };
   // Lifecycle hooks
   public hooks: typeof hooks;

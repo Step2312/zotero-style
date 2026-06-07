@@ -8,7 +8,12 @@ import { updatePublicationTags, getPublicationTitle } from "./utils";
 import Bubble from "./bubble";
 import { Tags } from "./tags";
 import LocalStorage from "./localStorage";
-import GraphView from "./graphView";
+import { delay } from "./promise";
+import { addNumberToCollectionTree as registerCollectionTreeNumbers } from "./views/collectionTree";
+import { createGraphView as createGraphViewModule } from "./views/graph";
+import { replaceCellIcon } from "./views/icons";
+import { addItemTreeStyle } from "./views/style";
+import { openStyleDialog } from "./views/dialog";
 var ColorRNA = require('color-rna');
 
 
@@ -23,8 +28,8 @@ export default class Views {
     Zotero[config.addonInstance].data.views = this
     this.storage = storage;
     this.progress = new Progress()
-    Zotero.ZoteroStyle.data.Tags = Tags;
-    this.addStyle()
+    Zotero[config.addonInstance].data.Tags = Tags;
+    addItemTreeStyle()
     try {
       ztoolkit.patch(
         Zotero.CollectionTreeRow.prototype, "getItems", config.addonRef,
@@ -49,6 +54,8 @@ export default class Views {
   }
 
   public addStyle() {
+    addItemTreeStyle();
+    return;
     document.querySelector("#odd-even-row-style")?.remove();
     const oddColor = Zotero.Prefs.get(`${config.addonRef}.titleColumn.odd`) as string
     const evenColor = Zotero.Prefs.get(`${config.addonRef}.titleColumn.even`) as string
@@ -115,7 +122,7 @@ export default class Views {
    */
   public async renderTitleColumn() {
     // 防止与其他插件冲突
-    await Zotero.Promise.delay(1000)
+    await delay(1000)
     ztoolkit.log("renderTitleColumn")
     if (!Zotero.Prefs.get(`${config.addonRef}.function.titleColumn.enable`) as boolean) { return }
     const key = "title"
@@ -136,7 +143,7 @@ export default class Views {
         const cellSpan = original(index, data, column) as HTMLSpanElement;
         // 图标替换
         try {
-          this.replaceCellIcon(ZoteroPane.getSortedItems()[index], cellSpan)
+          replaceCellIcon(ZoteroPane.getSortedItems()[index], cellSpan)
         } catch { }
         let titleSpan = cellSpan.querySelector(".cell-text") as HTMLSpanElement;
         const titleHTML = titleSpan.innerHTML
@@ -307,42 +314,6 @@ export default class Views {
         },
       ]
     )
-  }
-
-  private replaceCellIcon(item: Zotero.Item, cellSpan: HTMLSpanElement) {
-    const iconSpan = cellSpan.querySelector(".cell-icon") as HTMLSpanElement
-    let res = item.attachmentPath?.match(/\.(\w+)$/)
-    if (!res || res.length != 2) { return }
-    switch (res[1]) {
-      case "jpeg":
-      case "png":
-      case "jpg":
-      case "gif":
-        iconSpan.style.backgroundImage = `url(chrome://${config.addonRef}/content/icons/picture.png)`
-        break
-      case "zip":
-      case "gz":
-      case "tar":
-        iconSpan.style.backgroundImage = `url(chrome://${config.addonRef}/content/icons/zip.png)`
-        break
-      case "doc":
-      case "docx":
-      case "docm":
-        iconSpan.style.backgroundImage = `url(chrome://${config.addonRef}/content/icons/word.png)`
-        break
-      case "pptx":
-      case "ppt":
-      case "pptm":
-        iconSpan.style.backgroundImage = `url(chrome://${config.addonRef}/content/icons/ppt.png)`
-        break
-      case "xls":
-      case "xlsx":
-      case "xltx":
-        iconSpan.style.backgroundImage = `url(chrome://${config.addonRef}/content/icons/excel.png)`
-        break
-      default:
-        break
-    }
   }
 
   /**
@@ -1417,12 +1388,12 @@ export default class Views {
       (original) =>
         function () {
           original.apply(ZoteroPane.itemsView, arguments);
-          if (!Zotero.ZoteroStyle) { return }
+          if (!Zotero[config.addonInstance]) { return }
           let sort = (columnsViews: ColumnsView[]) => {
             return columnsViews.sort((a: ColumnsView, b: ColumnsView) => Number(a.position) - Number(b.position))
           }
           let addUpdateView = (columnsView: ColumnsView, label: string = "Add") => {
-            dialog({
+            openStyleDialog({
               attributes: { buttonlabelaccept: label, title: "New View"}, 
               element: ztoolkit.UI.createElement(
                 document,
@@ -1627,7 +1598,7 @@ export default class Views {
         function () {
           // @ts-ignore
           original.apply(ZoteroPane.itemsView, arguments);
-          if (!Zotero.ZoteroStyle) { return }
+          if (!Zotero[config.addonInstance]) { return }
           const menupopup = [...document.querySelectorAll("#zotero-column-picker")].slice(-1)[0]
           let left = menupopup.getBoundingClientRect().left
           let rect
@@ -1866,7 +1837,7 @@ export default class Views {
               vbox.appendChild(control)
             }
             // 对话框
-            dialog({
+            openStyleDialog({
               attributes: {
                 buttonlabelaccept: "Set",
                 title: colKey.charAt(0).toUpperCase() + colKey.slice(1)
@@ -1886,9 +1857,7 @@ export default class Views {
    * Obsidian
    */
   public async createGraphView() {
-    if (!Zotero.Prefs.get(`${config.addonRef}.function.graphView.enable`) as boolean) { return }
-    await (new GraphView()).init();
-
+    await createGraphViewModule();
   }
 
   /**
@@ -2241,7 +2210,7 @@ export default class Views {
             } catch { }
             progress.style.width = `${i / ids.length * 100}%`
             prompt.inputNode.value = `[Pending] ${i}/${ids.length}`
-            await Zotero.Promise.delay(10)
+            await delay(10)
           }
           prompt.inputNode.value = ""
           // @ts-ignore
@@ -3036,7 +3005,7 @@ export default class Views {
     }
     const p = "#zotero-items-tree .virtualized-table-body"
     while (!document.querySelector(p)) {
-      await Zotero.Promise.delay(10)
+      await delay(10)
     }
     
     const table = document.querySelector(p)
@@ -3175,7 +3144,7 @@ export default class Views {
     if (!Zotero.Prefs.get(`${config.addonRef}.function.Tags.enable`) as boolean) { return }
     // 等待加载
     while (!ZoteroPane.tagSelector) {
-      await Zotero.Promise.delay(100)
+      await delay(100)
     }
     const tagsUI = new Tags();
     this.tagsUI = tagsUI;
@@ -3277,6 +3246,8 @@ export default class Views {
   }
 
   public async addNumberToCollectionTree() {
+    await registerCollectionTreeNumbers(this.cache);
+    return;
     if (!Zotero.Prefs.get(`${config.addonRef}.function.addNumberToCollectionTree.enable`) as boolean) { return }
     try {
       ztoolkit.patch(
@@ -3388,20 +3359,6 @@ export default class Views {
       )
     } catch {}
   }
-}
-
-function dialog(io: {
-  attributes: {},
-  element: XUL.Element,
-  hooks: { accept?: Function, cancel?: Function }
-}, width: number, height: number) {
-  // @ts-ignore
-  window.openDialog(
-    `chrome://${config.addonRef}/content/dialog.xul`,
-    "zotero-style",
-    `chrome,centerscreen,width=${width},height=${height},alwaysRaised=yes,resizable=yes`,
-    io
-  );
 }
 
 interface Record {

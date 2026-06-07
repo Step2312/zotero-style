@@ -1,5 +1,6 @@
 import AddonItem from "./item";
 import LocalStorage from "./localStorage";
+import { ZoteroStyleStorage } from "../storage";
 
 export default class Events {
 	public recordInterval = 10;  // s
@@ -13,9 +14,9 @@ export default class Events {
 		hangCount: -1
 	}
 	public intervalID: number | undefined;
-	private storage: AddonItem | LocalStorage;
+	private storage: ZoteroStyleStorage;
 	private cache: {[key: string]: any} = {};
-	constructor(storage: AddonItem) {
+	constructor(storage: ZoteroStyleStorage) {
 		this.storage = storage;
 	}
 

@@ -1,6 +1,6 @@
 {
   "name": "zotero-style",
-  "version": "2.6.7",
+  "version": "1.0.0",
   "description": "A Zotero plugin for creating a personal Zotero Style.",
   "config": {
     "addonName": "Zotero Style",
@@ -63,6 +63,7 @@
     "esbuild": "^0.16.17",
     "release-it": "^15.6.0",
     "replace-in-file": "^6.3.5",
+    "typescript": "^6.0.3",
     "uglify-js": "^3.17.4",
     "zotero-types": "^0.1.5"
   }
